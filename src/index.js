@@ -8,12 +8,28 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
+const Result = ({ clickCount, good, bad, neutral }) => {
+  if (clickCount !== 0) {
+    return (
+      <div>
+        <p>good{good}</p> <p>neutral{neutral}</p> <p>bad{bad}</p>
+      </div>
+    );
+  }
+  return <div>No Result</div>;
+};
+
 const Average = ({ average }) => {
-  return <div>average {average || 0}</div>;
+  if (average) {
+  return <div>average {average}</div>
+  }
+  return <></>
 };
 
 const Positive = ({ positive }) => {
-  return <div>{positive || 0}%</div>;
+  if(positive) {
+  return <div>{positive || 0}%</div>}
+  return <></>
 };
 
 const App = (props) => {
@@ -45,10 +61,7 @@ const App = (props) => {
       <Button handleClick={incrementGood} text="good" />
       <Button handleClick={incrementNeutral} text="nutoral" />
       <Button handleClick={incrementBad} text="bod" />
-      <div>
-        <p>good{good}</p> <p>neutral{neutral}</p> <p>bad{bad}</p>
-      </div>
-      <p>total{clickCount}</p>
+      <Result good={good} bad={bad} neutral={neutral} clickCount={clickCount} />
       <Average average={average} />
       <Positive positive={positive} />
     </div>
