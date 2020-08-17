@@ -8,6 +8,14 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
+const Average = ({ average }) => {
+  return <div>average {average || 0}</div>;
+};
+
+const Positive = ({ positive }) => {
+  return <div>{positive || 0}%</div>;
+};
+
 const App = (props) => {
   const [ good, setGood ] = useState(0);
   const [ neutral, setNeutral ] = useState(0);
@@ -30,7 +38,7 @@ const App = (props) => {
 
   const average = good - bad / clickCount;
 
-  const positivePercent = good / clickCount;
+  const positive = good / clickCount;
   return (
     <div>
       <h1>give feedback</h1>
@@ -41,8 +49,8 @@ const App = (props) => {
         <p>good{good}</p> <p>neutral{neutral}</p> <p>bad{bad}</p>
       </div>
       <p>total{clickCount}</p>
-      <p>average{average || 0}</p>
-      <p>{positivePercent || 0}%</p>
+      <Average average={average} />
+      <Positive positive={positive} />
     </div>
   );
 };
