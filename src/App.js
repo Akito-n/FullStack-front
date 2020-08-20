@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NewPersonForm from './components/newPersonFrom.jsx';
 import SeachPerson from './components/searchPerson.tsx';
 import Persons from './components/Persons.tsx';
+import axios from 'axios'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]);
   const [ newName, setNewName ] = useState('');
   const [ newNomber, setNewNomber ] = useState('');
   const [ searchWord, setSerchWord ] = useState('');
+
+  const hook = () => {
+    axios.get('https://restcountries.eu/rest/v2/all').then(response => {
+      setPersons(response.data)
+    })
+  }
+
+  useEffect(hook, [])
 
   const handleNmaeChange = (event) => {
     console.log('change', event.target.value);
@@ -29,9 +34,9 @@ const App = () => {
     setSerchWord(e.target.value);
   };
 
-  const result =
+  const results =
     searchWord === ''
-      ? persons
+      ? []
       : persons.filter((person) => {
           return person.name.includes(searchWord);
         });
@@ -55,16 +60,16 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <SeachPerson handleSearch={handleSearch} searchWord={searchWord} />
-      <NewPersonForm
+      {/* <NewPersonForm
         handleSetPerson={handleSetPerson}
         newName={newName}
         newNomber={newNomber}
         handleNmaeChange={handleNmaeChange}
         handleNumberChange={handleNumberChange}
-      />
+      /> */}
       <h2>Numbers</h2>
       ...
-      <Persons result={result} />
+      <Persons results={results} />
       <div>
         debug: <p>{searchWord}</p>
       </div>
