@@ -1,17 +1,37 @@
 import React, { useState } from 'react';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([ { name: 'Arto Hellas', number: '1234-52121' } ]);
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ]);
   const [ newName, setNewName ] = useState('');
   const [ newNomber, setNewNomber ] = useState('');
+  const [ searchWord, setSerchWord ] = useState('');
+
   const handleNmaeChange = (event) => {
     console.log('change', event.target.value);
     setNewName(event.target.value);
   };
+
   const handleNumberChange = (event) => {
     console.log('change', event.target.value);
     setNewNomber(event.target.value);
   };
+
+  const handleSearch = (e) => {
+    console.log(searchWord);
+    setSerchWord(e.target.value);
+  };
+
+  const result =
+    searchWord === ''
+      ? persons
+      : persons.filter((person) => {
+          return person.name.includes(searchWord);
+        });
 
   const handleSetPerson = (event) => {
     event.preventDefault();
@@ -31,6 +51,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        <label>search</label>
+        <input value={searchWord} onChange={handleSearch} />
+      </div>
       <form onSubmit={handleSetPerson}>
         <div>
           name: <input value={newName} onChange={handleNmaeChange} />
@@ -45,11 +69,14 @@ const App = () => {
       <h2>Numbers</h2>
       ...
       <div>
-        debug:{persons.map((person, index) => (
+        {result.map((person, index) => (
           <li key={index}>
             {person.name}: {person.number}
           </li>
         ))}
+      </div>
+      <div>
+        debug: <p>{searchWord}</p>
       </div>
     </div>
   );
