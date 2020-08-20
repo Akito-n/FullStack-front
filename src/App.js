@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NewPersonForm from './components/newPersonFrom.jsx';
 import SeachPerson from './components/searchPerson.tsx';
 import Persons from './components/Persons.tsx';
-import axios from 'axios'
+import PersonService from './service/person.ts'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -12,8 +12,8 @@ const App = () => {
   const [ searchWord, setSerchWord ] = useState('');
 
   const hook = () => {
-    axios.get('https://restcountries.eu/rest/v2/all').then(response => {
-      setPersons(response.data)
+    PersonService.getAll().then(initialPersons => {
+      setPersons(initialPersons)
     })
   }
 
@@ -34,9 +34,9 @@ const App = () => {
     setSerchWord(e.target.value);
   };
 
-  const results =
+  const result =
     searchWord === ''
-      ? []
+      ? persons
       : persons.filter((person) => {
           return person.name.includes(searchWord);
         });
@@ -48,28 +48,36 @@ const App = () => {
       window.alert(`${newName} is already added to phonebook`);
       return;
     }
+
     const newUser = {
       name: newName,
       number: newNomber
     };
-    setPersons(persons.concat(newUser));
+    PersonService.create(newUser).then(returnedUser => setPersons(persons.concat(returnedUser)))
     setNewName('');
+    setNewNomber('')
   };
+
+  const handleDestroy = (id) => {
+      PersonService.destroy(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id))
+      })
+    }
 
   return (
     <div>
       <h2>Phonebook</h2>
       <SeachPerson handleSearch={handleSearch} searchWord={searchWord} />
-      {/* <NewPersonForm
+      <NewPersonForm
         handleSetPerson={handleSetPerson}
         newName={newName}
         newNomber={newNomber}
         handleNmaeChange={handleNmaeChange}
         handleNumberChange={handleNumberChange}
-      /> */}
+      />
       <h2>Numbers</h2>
       ...
-      <Persons results={results} />
+      <Persons result={result} handleDestroy={handleDestroy} />
       <div>
         debug: <p>{searchWord}</p>
       </div>
