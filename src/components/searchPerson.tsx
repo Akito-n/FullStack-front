@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchPerson = ({ searchWord, handleSearch }) => {
+const SearchPerson = ({ searchWord, handleSearch }: {searchWord: any, handleSearch: any }) => {
   return (
     <div>
       <label>search</label>

@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3008/persons'
+const baseUrl = '/api/persons'
 
 interface PersonProps {
   name: string,
-      number: string,
-      id: number
+  number: string,
+  id: number
 }
 
 const getAll = () => {
